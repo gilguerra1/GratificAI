@@ -1,6 +1,35 @@
 {
+  "name": "gratificai-mvp",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node dev.mjs",
+    "dev:web": "vite",
+    "dev:api": "node server/index.mjs",
+    "db:bootstrap": "node server/bootstrap.mjs",
+    "db:migrate:sqlite": "node server/migrate-sqlite.mjs",
+    "build": "tsc --noEmit && vite build",
+    "start": "node server/index.mjs",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
   "dependencies": {
     "@opentelemetry/api": "^1.10.0",
-    "@opentelemetry/auto-instrumentations-node": "^0.83.1"
+    "@opentelemetry/auto-instrumentations-node": "^0.83.1",
+    "pg": "^8.16.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "pg-mem": "^3.0.5",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.0",
+    "vite": "^7.0.0",
+    "vitest": "^5.1.1"
   }
 }
