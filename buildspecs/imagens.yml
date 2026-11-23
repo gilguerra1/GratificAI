@@ -1,0 +1,38 @@
+# Build das imagens da API e do front, Trivy e push no ECR; gera o imagedefinitions.json do deploy no ECS.
+# Projeto CodeBuild: gratificai-imagens (modo privilegiado), variaveis ECR_API_URI e ECR_WEB_URI.
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - curl -sSL https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_Linux-64bit.tar.gz | tar xz -C /usr/local/bin trivy
+  pre_build:
+    commands:
+      - |
+        TAG=$(echo "$CODEBUILD_RESOLVED_SOURCE_VERSION" | cut -c1-12)
+        IMG_API="$ECR_API_URI:$TAG"
+        IMG_WEB="$ECR_WEB_URI:$TAG"
+        REGISTRO=$(echo "$ECR_API_URI" | cut -d/ -f1)
+        echo "API: $IMG_API"
+        echo "WEB: $IMG_WEB"
+        aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$REGISTRO"
+  build:
+    on-failure: ABORT
+    commands:
+      # set -e: se o Trivy reprovar qualquer imagem, nada e publicado.
+      - |
+        set -e
+        docker build -f mvp/Dockerfile.api -t "$IMG_API" mvp
+        docker build -f mvp/Dockerfile.web --build-arg NGINX_SITE_CONF=nginx.ecs.conf -t "$IMG_WEB" mvp
+        for IMG in "$IMG_API" "$IMG_WEB"; do
+          echo "===== Trivy: $IMG ====="
+          trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed --no-progress --db-repository public.ecr.aws/aquasecurity/trivy-db:2 "$IMG"
+        done
+        docker push "$IMG_API"
+        docker push "$IMG_WEB"
+        printf '[{"name":"api","imageUri":"%s"},{"name":"web","imageUri":"%s"}]' "$IMG_API" "$IMG_WEB" > imagedefinitions.json
+        cat imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json

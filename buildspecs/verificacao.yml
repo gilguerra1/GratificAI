@@ -1,0 +1,23 @@
+# Fitness function pos-deploy: a aplicacao publicada responde 200 em menos de 1 segundo,
+# inclusive numa rota que consulta o banco. Projeto CodeBuild: gratificai-verificacao, variavel APP_URL.
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - |
+        set -e
+        verificar() {
+          for tentativa in 1 2 3; do
+            RESP=$(curl -s -o /dev/null -w "%{http_code} %{time_total}" "$APP_URL$1" || echo "000 9")
+            CODIGO=${RESP% *}; TEMPO=${RESP#* }
+            echo "$1 -> HTTP $CODIGO em ${TEMPO}s (tentativa $tentativa)"
+            if [ "$CODIGO" = "200" ] && awk -v t="$TEMPO" 'BEGIN { exit !(t < 1.0) }'; then return 0; fi
+            sleep 10
+          done
+          echo "FALHOU: $1 nao respondeu 200 em menos de 1s"
+          return 1
+        }
+        verificar /api/health
+        verificar /api/auth/setup
+        echo "Aplicacao publicada e saudavel."

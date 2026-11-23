@@ -1,0 +1,17 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LerSenhaDoBanco",
+      "Effect": "Allow",
+      "Action": "secretsmanager:GetSecretValue",
+      "Resource": "<ARN-DO-SEGREDO-DO-RDS>-*"
+    },
+    {
+      "Sid": "CriarGrupoDeLogsDasTasks",
+      "Effect": "Allow",
+      "Action": "logs:CreateLogGroup",
+      "Resource": "arn:aws:logs:us-east-1:<CONTA>:log-group:/ecs/gratificai*"
+    }
+  ]
+}
