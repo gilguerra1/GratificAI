@@ -172,7 +172,7 @@ export function calcularNotaGratificacao(u: Unidade, campos: Campos, portaria: P
     : (cargo === 'mac' || (!cargo && perfil === 'mac')) ? portaria.regras.fatorMac : 1;
   const gratificacaoBruta = nota < portaria.regras.corte
     ? 0
-    : portaria.regras.vref * nota / 100 * fatorCargo;
+    : portaria.regras.vref * nota / 100;
 
   return {
     nota: Math.round(nota * 100) / 100,
