@@ -30,7 +30,7 @@ export function Header({ user, onLogout, onMenu, menuOpen }: { user: Usuario; on
         </button>
         <div className="min-w-0">
           <p className="hidden truncate text-xs font-medium text-slate-500 sm:block">Prefeitura do Recife · SESAU</p>
-          <p className="truncate text-sm font-semibold text-slate-800">Gratificação por desempenho</p>
+          <p className="truncate text-sm font-semibold text-slate-800">Gratificação por desempenho · deploy via pipeline</p>
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
