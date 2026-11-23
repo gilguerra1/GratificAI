@@ -191,3 +191,14 @@ docker compose push
 O login solicita a credencial no terminal; não a inclua em comandos, ficheiros ou no repositório. As imagens publicadas são `ghcr.io/paulocvt/gratificai-api:latest` e `ghcr.io/paulocvt/gratificai-web:latest`.
 
 Rotas principais: `GET /api/auth/setup`, `POST /api/auth/login`, `GET /api/auth/session`, `POST /api/auth/logout`, `POST /api/auth/password`, `GET /api/state`, operações de lançamento em `/api/unidades`, incluindo `POST /api/unidades/:id/review` (exclusiva da CAM), cadastro CAM em `/api/usuarios`, e parametrização em `/api/portarias`.
+
+## Implantação na AWS
+
+Consulte [docs/infra-aws.md](./docs/infra-aws.md) para a visão da arquitetura, pipeline e configuração da implantação. Salve cópias com valores reais como `*.local.json`; esses arquivos são ignorados pelo Git.
+
+```text
+buildspecs/   -> etapas do CodeBuild (caminhos usados pelo pipeline)
+infra/aws/    -> modelos de task definition e políticas IAM (com placeholders)
+docs/         -> documentação da implantação
+mvp/          -> aplicação (front React + API Node)
+```

@@ -14,7 +14,7 @@
       "portMappings": [{ "containerPort": 3001, "protocol": "tcp" }],
       "environment": [
         { "name": "NODE_ENV", "value": "production" },
-        { "name": "APP_ORIGIN", "value": "https://<SEU-DOMINIO>.cloudfront.net" },
+        { "name": "APP_ORIGIN", "value": "https://<DOMINIO-CLOUDFRONT>" },
         { "name": "API_HOST", "value": "0.0.0.0" },
         { "name": "API_PORT", "value": "3001" },
         { "name": "PGHOST", "value": "<ENDPOINT-DO-RDS>" },

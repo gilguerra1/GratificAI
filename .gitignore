@@ -3,3 +3,7 @@
 !.env.example
 
 node_modules/
+mvp/node_modules/
+mvp/dist/
+*.local.json
+infra/aws/**/*.local.json
